@@ -1,7 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FaHtml5, FaCss3Alt, FaJs, FaAngular, FaNodeJs, FaDatabase, FaReact, FaComments, FaUsers, FaBrain } from 'react-icons/fa';
+import SkillsImg from '../../assets/skils.jpg'
 
 const Skills = () => {
+  const technicalSkills = [
+    { name: 'HTML', icon: FaHtml5 },
+    { name: 'CSS', icon: FaCss3Alt },
+    { name: 'JavaScript', icon: FaJs },
+    { name: 'Angular', icon: FaAngular },
+    { name: 'Node.js', icon: FaNodeJs },
+    { name: 'MySQL', icon: FaDatabase },
+    { name: 'React.js', icon: FaReact },
+  ];
+
+  const personalSkills = [
+    { name: 'Communication', icon: FaComments },
+    { name: 'Leadership', icon: FaUsers },
+    { name: 'Logical Thinking', icon: FaBrain },
+  ];
+
   return (
     <section className="min-h-screen bg-gray-900 text-white p-10 grid grid-cols-1 md:grid-cols-[2fr_1fr] items-center">
       {/* Left Side with Skills */}
@@ -22,34 +40,49 @@ const Skills = () => {
         >
           Here are the skills I've developed over the years in both technical and personal areas.
         </motion.p>
-
-        {/* Skills List */}
-        <motion.ul
-          className="list-disc list-inside space-y-2 text-gray-300"
+        {/* Skills Lists */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
           {/* Technical Skills */}
-          <motion.li
-            className="text-lg font-semibold"
-            variants={item}
-          >
-            HTML, CSS, JavaScript, Angular, Node.js, MySQL, React.js
-          </motion.li>
-
+          <div>
+            <h3 className="text-2xl font-semibold mb-4 text-[#33FF66]">Technical Skills</h3>
+            <ul className="space-y-3">
+              {technicalSkills.map((skill, index) => (
+                <motion.li
+                  key={index}
+                  className="flex items-center space-x-2 text-gray-300"
+                  variants={item}
+                >
+                  <skill.icon className="w-6 h-6 text-[#33FF66]" />
+                  <span>{skill.name}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
           {/* Personal Skills */}
-          <motion.li
-            className="text-lg font-semibold"
-            variants={item}
-          >
-            Communication, Leadership, Logical Thinking
-          </motion.li>
-        </motion.ul>
+          <div>
+            <h3 className="text-2xl font-semibold mb-4 text-[#33FF66]">Personal Skills</h3>
+            <ul className="space-y-3">
+              {personalSkills.map((skill, index) => (
+                <motion.li
+                  key={index}
+                  className="flex items-center space-x-2 text-gray-300"
+                  variants={item}
+                >
+                  <skill.icon className="w-6 h-6 text-[#33FF66]" />
+                  <span>{skill.name}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
       </div>
-
       {/* Right Side with Image */}
-      <div className="relative flex justify-center">
+      <div className="relative flex justify-center mt-10 md:mt-0">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -59,8 +92,8 @@ const Skills = () => {
         >
           <div className="absolute inset-0 bg-[#33FF66] z-0 rounded-lg" style={{ margin: '20px' }} />
           <motion.img
-            src="/path/to/your/image.jpg" // Replace with the actual path to your image
-            alt="Profile"
+            src={SkillsImg}
+            alt="Skills representation"
             className="relative z-10 w-80 h-80 object-cover rounded-lg shadow-xl"
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -77,7 +110,7 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
       when: "beforeChildren",
     },
   },
@@ -85,8 +118,8 @@ const staggerContainer = {
 
 // Item variant for list animation
 const item = {
-  hidden: { opacity: 0, x: -50 },
-  visible: { opacity: 1, x: 0 },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
 };
 
 export default Skills;
