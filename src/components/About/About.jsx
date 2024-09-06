@@ -20,7 +20,7 @@ const About = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.2 }}
         >
-          Hello Everyone.
+          Hello Everyone.hello
         </motion.h2>
 
         <motion.h1
