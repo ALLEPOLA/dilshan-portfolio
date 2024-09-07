@@ -14,7 +14,7 @@ const ProfileAbout = () => (
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: 'easeInOut' }}
       >
-        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-green-400 rounded-lg transform -translate-x-8 -translate-y-8"></div>
+        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-[#33FF66] rounded-lg transform -translate-x-8 -translate-y-8"></div>
         <img
           src={profileImage}
           alt="Profile"
@@ -41,7 +41,7 @@ const ProfileAbout = () => (
         {/* Buttons */}
         <div className="flex space-x-4">
           <motion.button
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
+            className="bg-[#33FF66] hover:bg-[#2EDD5C] text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -50,7 +50,7 @@ const ProfileAbout = () => (
           <motion.a
             href={cvFile}
             download="Dilshan_Prasanna_CV.pdf"
-            className="border-2 border-green-500 hover:bg-green-600 hover:text-white text-green-500 font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
+            className="border-2 border-[#33FF66] hover:bg-[#2EDD5C] hover:text-white text-[#33FF66] font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
