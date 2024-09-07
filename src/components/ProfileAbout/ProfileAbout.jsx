@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import profileImage from '../../assets/image2.jpg'; // Make sure to update the image path
+import profileImage from '../../assets/image2.jpg'; // Update the image path as needed
+import cvFile from '../../assets/CV.pdf'; // Add the path to your CV file
 
 const ProfileAbout = () => (
   <section className="min-h-screen bg-gray-800 flex items-center justify-center p-8">
@@ -46,13 +47,15 @@ const ProfileAbout = () => (
           >
             Hire Me
           </motion.button>
-          <motion.button
+          <motion.a
+            href={cvFile}
+            download="Dilshan_Prasanna_CV.pdf"
             className="border-2 border-green-500 hover:bg-green-600 hover:text-white text-green-500 font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Download CV
-          </motion.button>
+          </motion.a>
         </div>
       </motion.div>
     </div>
