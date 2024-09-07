@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaHtml5, FaCss3Alt, FaJs, FaAngular, FaNodeJs, FaDatabase, FaReact, FaComments, FaUsers, FaBrain } from 'react-icons/fa';
-import SkillsImg from '../../assets/skils.jpg'
+import SkillsImg from '../../assets/skils.jpg';
 
 const Skills = () => {
   const technicalSkills = [
@@ -41,12 +41,7 @@ const Skills = () => {
           Here are the skills I've developed over the years in both technical and personal areas.
         </motion.p>
         {/* Skills Lists */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Technical Skills */}
           <div>
             <h3 className="text-2xl font-semibold mb-4 text-[#33FF66]">Technical Skills</h3>
@@ -55,7 +50,9 @@ const Skills = () => {
                 <motion.li
                   key={index}
                   className="flex items-center space-x-2 text-gray-300"
-                  variants={item}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }} // Staggered delay
                 >
                   <skill.icon className="w-6 h-6 text-[#33FF66]" />
                   <span>{skill.name}</span>
@@ -71,7 +68,9 @@ const Skills = () => {
                 <motion.li
                   key={index}
                   className="flex items-center space-x-2 text-gray-300"
-                  variants={item}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }} // Staggered delay
                 >
                   <skill.icon className="w-6 h-6 text-[#33FF66]" />
                   <span>{skill.name}</span>
@@ -79,7 +78,7 @@ const Skills = () => {
               ))}
             </ul>
           </div>
-        </motion.div>
+        </div>
       </div>
       {/* Right Side with Image */}
       <div className="relative flex justify-center mt-10 md:mt-0">
@@ -102,24 +101,6 @@ const Skills = () => {
       </div>
     </section>
   );
-};
-
-// Stagger Container for Skill Animations
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      when: "beforeChildren",
-    },
-  },
-};
-
-// Item variant for list animation
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
 };
 
 export default Skills;

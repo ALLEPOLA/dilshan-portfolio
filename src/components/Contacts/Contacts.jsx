@@ -32,12 +32,21 @@ const Contacts = () => {
       .send(
         'service_v00vnam', // Replace with your service ID
         'template_boziy3a', // Replace with your template ID
-        emailParams, // Use emailParams instead of form.current
+        emailParams, // Use emailParams
         'QOQuRU-v_0cF_qi-PqNJ2' // Replace with your user ID
       )
       .then(
         (result) => {
           console.log('Email sent successfully:', result.text);
+          // Clear the form fields
+          setFormData({
+            name: '',
+            email: '',
+            subject: '',
+            message: ''
+          });
+          // Refresh the page
+          window.location.href = window.location.href;
         },
         (error) => {
           console.log('Error sending email:', error.text);
