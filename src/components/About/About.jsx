@@ -5,12 +5,32 @@ import { FaLinkedin, FaGithub, FaEnvelope, FaPhone } from 'react-icons/fa';
 import profileImage from '../../assets/profile.png';
 
 const About = () => {
+  const backgroundVariants = {
+    animate: {
+      backgroundPosition: ['0% 0%', '100% 100%'],
+      transition: {
+        duration: 20,
+        ease: "linear",
+        repeat: Infinity,
+        repeatType: "reverse"
+      }
+    }
+  };
+
   return (
-    <section className="min-h-screen flex flex-col relative">
+    <motion.section 
+      className="min-h-screen flex flex-col relative overflow-hidden"
+      variants={backgroundVariants}
+      animate="animate"
+      style={{
+        backgroundImage: 'radial-gradient(circle at 10% 20%, rgb(21, 21, 21) 0%, rgb(64, 64, 64) 90.2%)',
+        backgroundSize: '400% 400%'
+      }}
+    >
       <div className="flex-grow grid grid-cols-1 md:grid-cols-[2fr_1fr]">
-        {/* Left side with text (dark background) */}
+        {/* Left side with text */}
         <motion.div
-          className="bg-gray-900 text-white flex flex-col justify-center items-start p-8 md:p-12 space-y-4 md:space-y-6"
+          className="bg-gray-900 bg-opacity-70 text-white flex flex-col justify-center items-start p-8 md:p-12 space-y-4 md:space-y-6"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: 'easeInOut' }}
@@ -64,8 +84,13 @@ const About = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right side with gradient background (increased size) */}
-        <div className="bg-gradient-to-r from-[#33FF66] to-[#33FF66] relative">
+        {/* Right side with gradient background */}
+        <motion.div 
+          className="bg-gradient-to-r from-[#33FF66] to-[#2EDD5C] relative"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: 'easeInOut' }}
+        >
           {/* Contact Icons */}
           <motion.div
             className="absolute top-8 right-8 flex flex-col space-y-6 text-white"
@@ -91,24 +116,25 @@ const About = () => {
               </motion.a>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Profile Image - Adjusted position */}
+      {/* Profile Image */}
       <motion.div
-        className="absolute bottom-0 left-1/2 transform translate-x-[50cm] translate-y-1/2"
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.6 }}
       >
-        <img
+        <motion.img
           src={profileImage}
           alt="Dilshan Prasanna Allepola"
-          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover shadow-2xl"
+          className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover shadow-2xl rounded-full"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3 }}
         />
       </motion.div>
-
-    </section>
+    </motion.section>
   );
 };
 
