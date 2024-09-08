@@ -36,7 +36,7 @@ const ProfileAbout = () => (
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2, ease: 'easeInOut' }}
         >
-          I'm Dilshan Prasanna Allepola, a web developer skilled in Angular, React.js, Node.js, and Django. I create responsive, user-friendly websites and applications, including B2B invoice systems and ad management platforms. My focus is on clean design and efficient functionality.
+          I'm Dilshan Prasanna , a web developer skilled in Angular, React.js, Node.js, and Django. I create responsive, user-friendly websites and applications, including B2B invoice systems and ad management platforms. My focus is on clean design and efficient functionality.
         </motion.p>
         {/* Buttons */}
         <div className="flex space-x-4">
