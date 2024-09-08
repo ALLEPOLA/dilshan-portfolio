@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCode, FaGlobe, FaMobileAlt, FaComments, FaTimes } from 'react-icons/fa';
 
@@ -7,7 +7,7 @@ const Services = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [visible, setVisible] = useState({});
 
-  const allServices = [
+  const allServices = useMemo(() => [
     {
       icon: FaCode,
       title: 'Programming',
@@ -36,7 +36,7 @@ const Services = () => {
       category: 'business',
       details: 'Offering strategic guidance on technology choices, project management, and digital transformation. Experienced in working with startups and established businesses alike.'
     }
-  ];
+  ], []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -56,7 +56,7 @@ const Services = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [allServices]);
 
   const filteredServices = allServices.filter(service => 
     filter === 'all' || service.category === filter
