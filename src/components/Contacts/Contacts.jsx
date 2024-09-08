@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
@@ -103,7 +103,7 @@ const Contacts = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
         >
-          {/* Feel free to reach out for collaborations or just a friendly hello */}
+          Feel free to reach out for collaborations or just a friendly hello
         </motion.p>
 
         <div className="flex flex-col lg:flex-row items-center justify-between">
