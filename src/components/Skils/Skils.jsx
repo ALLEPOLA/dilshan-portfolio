@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaHtml5, FaCss3Alt, FaJs, FaAngular, FaNodeJs, FaDatabase, FaReact, FaComments, FaUsers, FaBrain, FaTimes } from 'react-icons/fa';
-import SkillsImg from '../../assets/skils.jpg';
 
 const Skills = () => {
-  const [hoveredSkill, setHoveredSkill] = useState(null);
   const [filter, setFilter] = useState('all');
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [visible, setVisible] = useState({});
 
-  const allSkills = [
+  const allSkills = useMemo(() => [
     { name: 'HTML', icon: FaHtml5, color: '#E34F26', level: 5, category: 'technical', description: 'Proficient in creating semantic and accessible HTML structures.' },
     { name: 'CSS', icon: FaCss3Alt, color: '#1572B6', level: 5, category: 'technical', description: 'Expert in responsive design, CSS animations, and modern layout techniques.' },
     { name: 'JavaScript', icon: FaJs, color: '#F7DF1E', level: 5, category: 'technical', description: 'Strong command of ES6+, asynchronous programming, and DOM manipulation.' },
@@ -20,7 +18,7 @@ const Skills = () => {
     { name: 'Communication', icon: FaComments, color: '#FF6B6B', level: 4, category: 'personal', description: 'Excellent verbal and written communication skills, adept at explaining complex concepts.' },
     { name: 'Leadership', icon: FaUsers, color: '#4ECDC4', level: 4, category: 'personal', description: 'Proven ability to lead teams and manage projects effectively.' },
     { name: 'Logical Thinking', icon: FaBrain, color: '#45B7D1', level: 5, category: 'personal', description: 'Strong problem-solving skills and analytical approach to challenges.' },
-  ];
+  ], []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,7 +38,7 @@ const Skills = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [allSkills]);
 
   const filteredSkills = allSkills.filter(skill => 
     filter === 'all' || skill.category === filter
