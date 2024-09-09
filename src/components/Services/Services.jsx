@@ -13,14 +13,14 @@ const Services = () => {
       title: 'Programming',
       description: 'Developing robust and scalable applications using modern technologies.',
       category: 'technical',
-      details: 'Expertise in various programming languages including JavaScript, Python, and Java. Proficient in developing web applications, mobile apps, and backend systems.'
+      details: 'Expertise in various programming languages including JavaScript, C , and Java. Proficient in developing web applications, mobile apps, and backend systems.'
     },
     {
       icon: FaGlobe,
       title: 'Web Design',
       description: 'Creating visually appealing and user-friendly website designs.',
       category: 'creative',
-      details: 'Skilled in creating responsive and accessible web designs. Proficient with HTML5, CSS3, and modern design tools. Focus on creating intuitive and engaging user interfaces.'
+      details: 'Skilled in creating responsive and accessible web designs. Proficient with HTML, CSS, and modern design tools. Focus on creating intuitive and engaging user interfaces.'
     },
     {
       icon: FaMobileAlt,
