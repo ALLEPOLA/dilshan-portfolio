@@ -7,6 +7,7 @@ import cvFile from '../../assets/CV.pdf';
 
 const ProfileAbout = () => {
   const [visible, setVisible] = useState(false);
+  const [hoveredSkill, setHoveredSkill] = useState(null);
   const canvasRef = useRef(null);
   const controls = useAnimation();
 
@@ -98,6 +99,8 @@ const ProfileAbout = () => {
     }
   };
 
+  const skills = ["Angular", "React.js", "Node.js", "Django"];
+
   return (
     <motion.section 
       id="profile-about"
@@ -149,6 +152,39 @@ const ProfileAbout = () => {
             I'm Dilshan Prasanna, a web developer skilled in Angular, React.js, Node.js, and Django. I create responsive, user-friendly websites and applications, including B2B invoice systems and ad management platforms. My focus is on clean design and efficient functionality.
           </motion.p>
           
+          {/* Skills */}
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0 }}
+            animate={visible ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <h2 className="text-[#33FF66] text-2xl font-semibold mb-2">Skills:</h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <motion.span
+                  key={index}
+                  className="bg-gray-800 text-white px-3 py-1 rounded-full cursor-pointer"
+                  whileHover={{ scale: 1.1, backgroundColor: "#33FF66", color: "#1a202c" }}
+                  onHoverStart={() => setHoveredSkill(skill)}
+                  onHoverEnd={() => setHoveredSkill(null)}
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </div>
+            {hoveredSkill && (
+              <motion.p
+                className="text-gray-400 mt-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                {getSkillDescription(hoveredSkill)}
+              </motion.p>
+            )}
+          </motion.div>
+          
           {/* Buttons */}
           <motion.div 
             className="flex space-x-4"
@@ -178,5 +214,20 @@ const ProfileAbout = () => {
     </motion.section>
   );
 };
+
+function getSkillDescription(skill) {
+  switch (skill) {
+    case 'Angular':
+      return "Building dynamic single-page applications with Angular framework";
+    case 'React.js':
+      return "Creating interactive user interfaces with React.js library";
+    case 'Node.js':
+      return "Developing scalable server-side applications with Node.js";
+    case 'Django':
+      return "Building robust web applications with Django framework";
+    default:
+      return "";
+  }
+}
 
 export default ProfileAbout;
