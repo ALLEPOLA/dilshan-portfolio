@@ -6,7 +6,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const About = () => {
-  const controls = useAnimation();
   const modelRef = useRef();
   const [loading, setLoading] = useState(true);
   const [hoveredRole, setHoveredRole] = useState(null);
