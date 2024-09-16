@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaLinkedin, FaGithub } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
 import * as THREE from 'three';
@@ -16,27 +16,23 @@ const Contacts = () => {
   const sceneRef = useRef();
 
   useEffect(() => {
-    // Set up Three.js scene (same as before)
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     sceneRef.current.appendChild(renderer.domElement);
 
-    // Add lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     const pointLight = new THREE.PointLight(0xffffff, 1);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
 
-    // Add orbit controls
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.enableDamping = true;
     orbitControls.dampingFactor = 0.05;
     orbitControls.enableZoom = false;
 
-    // Add particle system
     const particlesGeometry = new THREE.BufferGeometry();
     const particlesCount = 5000;
     const posArray = new Float32Array(particlesCount * 3);
@@ -65,8 +61,16 @@ const Contacts = () => {
 
     animate();
 
-    // Cleanup
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
+      window.removeEventListener('resize', handleResize);
       renderer.dispose();
       sceneRef.current.removeChild(renderer.domElement);
     };
@@ -149,6 +153,19 @@ const Contacts = () => {
     },
   };
 
+  const contactInfo = [
+    { icon: FaPhone, text: '+94757358093', href: 'tel:+94757358093' },
+    { icon: FaEnvelope, text: 'prasannaellepola2000@gmail.com', href: 'mailto:prasannaellepola2000@gmail.com' },
+    { icon: FaMapMarkerAlt, text: '184 Vijitha Mawatha, Muruthalawa, Kandy', href: null }
+  ];
+
+  const socialLinks = [
+    { href: "https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit", icon: FaLinkedin },
+    { href: "https://github.com/", icon: FaGithub },
+    { href: "mailto:prasannaellepola2000@gmail.com", icon: FaEnvelope },
+    { href: "tel:+94757358093", icon: FaPhone }
+  ];
+
   return (
     <motion.section
       id="contact"
@@ -176,7 +193,6 @@ const Contacts = () => {
         </motion.p>
 
         <div className="flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
-          {/* Left Section: Contact Info */}
           <motion.div
             className="md:w-1/2 w-full mb-12 md:mb-0"
             initial={{ opacity: 0, x: -50 }}
@@ -189,11 +205,7 @@ const Contacts = () => {
               initial="hidden"
               animate="visible"
             >
-              {[
-                { icon: FaPhone, text: '+94757358093', href: 'tel:+94757358093' },
-                { icon: FaEnvelope, text: 'prasannaellepola2000@gmail.com', href: 'mailto:prasannaellepola2000@gmail.com' },
-                { icon: FaMapMarkerAlt, text: '184 Vijitha Mawatha, Muruthalawa, Kandy', href: null }
-              ].map((item, index) => (
+              {contactInfo.map((item, index) => (
                 <motion.div
                   key={index}
                   className="flex items-center"
@@ -211,19 +223,13 @@ const Contacts = () => {
               ))}
             </motion.div>
 
-            {/* Social Icons */}
             <motion.div
               className="flex space-x-4 mt-8"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              {[
-                { href: "https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit", icon: FaLinkedin },
-                { href: "https://github.com/", icon: FaGithub },
-                { href: "mailto:prasannaellepola2000@gmail.com", icon: FaEnvelope },
-                { href: "tel:+94757358093", icon: FaPhone }
-              ].map((item, index) => (
+              {socialLinks.map((item, index) => (
                 <motion.a
                   key={index}
                   href={item.href}
@@ -240,7 +246,6 @@ const Contacts = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right Section: Contact Form */}
           <motion.div
             className="md:w-1/2 w-full md:pl-12"
             initial={{ opacity: 0, x: 50 }}
@@ -248,30 +253,20 @@ const Contacts = () => {
             transition={{ duration: 1, delay: 0.5 }}
           >
             <form onSubmit={sendEmail} className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-lg">
-              <motion.div className="mb-4" variants={itemVariants}>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
-                  required
-                />
-              </motion.div>
-              <motion.div className="mb-4" variants={itemVariants}>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
-                  required
-                />
-              </motion.div>
+              {['name', 'email'].map((field) => (
+                <motion.div key={field} className="mb-4" variants={itemVariants}>
+                  <input
+                    type={field === 'email' ? 'email' : 'text'}
+                    id={field}
+                    name={field}
+                    placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
+                    required
+                  />
+                </motion.div>
+              ))}
               <motion.div className="mb-4" variants={itemVariants}>
                 <textarea
                   id="message"
@@ -302,7 +297,6 @@ const Contacts = () => {
           </motion.div>
         </div>
 
-        {/* Status Message */}
         <AnimatePresence>
           {submitStatus && (
             <motion.div

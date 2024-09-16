@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaLinkedin, FaGithub, FaEnvelope, FaPhone } from 'react-icons/fa';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -11,37 +11,32 @@ const About = () => {
   const [hoveredRole, setHoveredRole] = useState(null);
 
   useEffect(() => {
-    // Set up Three.js scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(400, 400);
     modelRef.current.appendChild(renderer.domElement);
 
-    // Add lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     const pointLight = new THREE.PointLight(0xffffff, 1);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
 
-    // Add orbit controls
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.enableDamping = true;
     orbitControls.dampingFactor = 0.05;
     orbitControls.enableZoom = false;
 
-    // Load 3D model
     const loader = new GLTFLoader();
     loader.load(
-      '/path/to/your/3d-model.glb', // Replace with your 3D model path
+      '/path/to/your/3d-model.glb',
       (gltf) => {
         const model = gltf.scene;
-        model.scale.set(0.5, 0.5, 0.5); // Adjust scale as needed
+        model.scale.set(0.5, 0.5, 0.5);
         scene.add(model);
         setLoading(false);
 
-        // Animate model
         const mixer = new THREE.AnimationMixer(model);
         const clips = gltf.animations;
         if (clips && clips.length > 0) {
@@ -49,19 +44,18 @@ const About = () => {
           action.play();
         }
 
-        const animate = () => {
-          requestAnimationFrame(animate);
-          mixer.update(0.016); // Update animation
+        const animateModel = () => {
+          requestAnimationFrame(animateModel);
+          mixer.update(0.016);
           orbitControls.update();
           renderer.render(scene, camera);
         };
-        animate();
+        animateModel();
       },
       undefined,
       (error) => console.error('Error loading 3D model:', error)
     );
 
-    // Add particle system
     const particlesGeometry = new THREE.BufferGeometry();
     const particlesCount = 5000;
     const posArray = new Float32Array(particlesCount * 3);
@@ -90,7 +84,6 @@ const About = () => {
 
     animate();
 
-    // Cleanup
     return () => {
       renderer.dispose();
       modelRef.current.removeChild(renderer.domElement);
@@ -137,6 +130,19 @@ const About = () => {
     },
   };
 
+  const getRoleDescription = (role) => {
+    switch (role) {
+      case 'UI/UX DEVELOPER':
+        return "Creating intuitive and visually appealing user interfaces";
+      case 'WEB DEVELOPER':
+        return "Building responsive and dynamic web applications";
+      case 'FULL STACK ENGINEER':
+        return "Developing end-to-end solutions from front-end to back-end";
+      default:
+        return "";
+    }
+  };
+
   return (
     <motion.section 
       className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800"
@@ -144,7 +150,6 @@ const About = () => {
       animate="animate"
     >
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-        {/* Left side with text */}
         <motion.div
           className="flex flex-col justify-center items-start space-y-6 z-10"
           initial={{ opacity: 0, x: -50 }}
@@ -218,7 +223,6 @@ const About = () => {
             </motion.div>
           )}
 
-          {/* Contact Icons */}
           <motion.div
             className="flex space-x-4 mt-8"
             variants={containerVariants}
@@ -247,7 +251,6 @@ const About = () => {
           </motion.div>
         </motion.div>
 
-        {/* Right side with 3D model */}
         <motion.div 
           className="relative flex flex-col justify-center items-center overflow-hidden"
           initial={{ opacity: 0, x: 50 }}
@@ -268,7 +271,6 @@ const About = () => {
             )}
           </motion.div>
 
-          {/* Motivational Tagline */}
           <motion.div
             className="text-white text-center mt-auto"
             initial={{ opacity: 0, y: 20 }}
@@ -302,18 +304,5 @@ const About = () => {
     </motion.section>
   );
 };
-
-function getRoleDescription(role) {
-  switch (role) {
-    case 'UI/UX DEVELOPER':
-      return "Creating intuitive and visually appealing user interfaces";
-    case 'WEB DEVELOPER':
-      return "Building responsive and dynamic web applications";
-    case 'FULL STACK ENGINEER':
-      return "Developing end-to-end solutions from front-end to back-end";
-    default:
-      return "";
-  }
-}
 
 export default About;

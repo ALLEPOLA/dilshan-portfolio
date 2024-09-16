@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaCode, FaGlobe, FaMobileAlt, FaComments, FaTimes } from 'react-icons/fa';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -41,6 +41,7 @@ const Services = () => {
     }
   ], []);
 
+  // Intersection Observer for service visibility animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -53,7 +54,7 @@ const Services = () => {
       { threshold: 0.1 }
     );
 
-    allServices.forEach((service, index) => {
+    allServices.forEach((_, index) => {
       const element = document.getElementById(`service-${index}`);
       if (element) observer.observe(element);
     });
@@ -61,6 +62,7 @@ const Services = () => {
     return () => observer.disconnect();
   }, [allServices]);
 
+  // 3D Particle Effect using Three.js
   useEffect(() => {
     if (!threeContainerRef.current) return;
 
@@ -84,17 +86,17 @@ const Services = () => {
     const particlesGeometry = new THREE.BufferGeometry();
     const particlesCount = 5000;
     const posArray = new Float32Array(particlesCount * 3);
-    
+
     for (let i = 0; i < particlesCount * 3; i++) {
       posArray[i] = (Math.random() - 0.5) * 5;
     }
-    
+
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particlesMaterial = new THREE.PointsMaterial({
       size: 0.005,
       color: 0x33FF66,
     });
-    
+
     const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particlesMesh);
 
@@ -126,7 +128,7 @@ const Services = () => {
     };
   }, []);
 
-  const filteredServices = allServices.filter(service => 
+  const filteredServices = allServices.filter(service =>
     filter === 'all' || service.category === filter
   );
 
@@ -135,15 +137,15 @@ const Services = () => {
       backgroundPosition: ['0% 0%', '100% 100%'],
       transition: {
         duration: 20,
-        ease: "linear",
+        ease: 'linear',
         repeat: Infinity,
-        repeatType: "reverse"
-      }
-    }
+        repeatType: 'reverse',
+      },
+    },
   };
 
   return (
-    <motion.section 
+    <motion.section
       className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800"
       variants={backgroundVariants}
       animate="animate"
@@ -168,7 +170,7 @@ const Services = () => {
         </motion.p>
 
         {/* Filter Buttons */}
-        <motion.div 
+        <motion.div
           className="flex justify-center space-x-4 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -195,10 +197,10 @@ const Services = () => {
               id={`service-${index}`}
               variants={{
                 hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 }
+                visible: { opacity: 1, y: 0 },
               }}
               initial="hidden"
-              animate={visible[`service-${index}`] ? "visible" : "hidden"}
+              animate={visible[`service-${index}`] ? 'visible' : 'hidden'}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg cursor-pointer"
               onClick={() => setSelectedService(service)}

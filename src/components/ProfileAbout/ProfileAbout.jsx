@@ -7,27 +7,37 @@ import profileImage from '../../assets/image2.jpg';
 import cvFile from '../../assets/CV.pdf';
 
 const ProfileAbout = () => {
-  const [, setVisible] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const controls = useAnimation();
-  const threeContainerRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
+  const [, setVisible] = useState(false); // State for animation trigger
+  const [showModal, setShowModal] = useState(false); // State for modal visibility
+  const controls = useAnimation(); // Framer motion animation controls
+  const threeContainerRef = useRef(null); // Ref for Three.js container
 
+  // Intersection observer to trigger animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setVisible(true);
+          setVisible(true); // Triggers animation visibility
           controls.start("visible");
         }
       },
       { threshold: 0.1 }
     );
 
-    observer.observe(document.getElementById('profile-about'));
+    const profileAboutElement = document.getElementById('profile-about');
+    if (profileAboutElement) {
+      observer.observe(profileAboutElement);
+    }
 
-    return () => observer.disconnect();
+    return () => {
+      if (profileAboutElement) {
+        observer.disconnect();
+      }
+    };
   }, [controls]);
 
+  // Three.js scene setup
   useEffect(() => {
     if (!threeContainerRef.current) return;
 
