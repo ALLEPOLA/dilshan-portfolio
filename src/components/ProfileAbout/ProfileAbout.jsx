@@ -7,9 +7,8 @@ import profileImage from '../../assets/image2.jpg';
 import cvFile from '../../assets/CV.pdf';
 
 const ProfileAbout = () => {
-  const [visible, setVisible] = useState(false);
+  const [, setVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const canvasRef = useRef(null);
   const controls = useAnimation();
   const threeContainerRef = useRef(null);
 

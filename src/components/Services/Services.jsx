@@ -8,7 +8,6 @@ const Services = () => {
   const [filter, setFilter] = useState('all');
   const [selectedService, setSelectedService] = useState(null);
   const [visible, setVisible] = useState({});
-  const controls = useAnimation();
   const threeContainerRef = useRef(null);
 
   const allServices = useMemo(() => [
