@@ -1,18 +1,77 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaLinkedin, FaGithub } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
-import profileImage from '../../assets/table.jpg';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const controls = useAnimation();
+  const sceneRef = useRef();
+
+  useEffect(() => {
+    // Set up Three.js scene (same as before)
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    sceneRef.current.appendChild(renderer.domElement);
+
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight.position.set(5, 5, 5);
+    scene.add(pointLight);
+
+    // Add orbit controls
+    const orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.enableDamping = true;
+    orbitControls.dampingFactor = 0.05;
+    orbitControls.enableZoom = false;
+
+    // Add particle system
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 5000;
+    const posArray = new Float32Array(particlesCount * 3);
+    
+    for (let i = 0; i < particlesCount * 3; i++) {
+      posArray[i] = (Math.random() - 0.5) * 5;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.005,
+      color: 0x33FF66,
+    });
+    
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    camera.position.z = 2;
+
+    const animate = () => {
+      requestAnimationFrame(animate);
+      orbitControls.update();
+      particlesMesh.rotation.y += 0.001;
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    // Cleanup
+    return () => {
+      renderer.dispose();
+      sceneRef.current.removeChild(renderer.domElement);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,10 +82,9 @@ const Contacts = () => {
     setIsSubmitting(true);
 
     const emailParams = {
-      to_email: formData.email,
+      to_email: 'your-email@example.com', // Replace with your email
       user_name: formData.name,
       user_email: formData.email,
-      subject: formData.subject,
       message: formData.message
     };
 
@@ -44,7 +102,6 @@ const Contacts = () => {
           setFormData({
             name: '',
             email: '',
-            subject: '',
             message: ''
           });
         },
@@ -71,24 +128,37 @@ const Contacts = () => {
     }
   };
 
-  const contactInfo = [
-    { icon: FaPhone, text: '+94757358093', href: 'tel:+94757358093' },
-    { icon: FaEnvelope, text: 'prasannaellepola2000@gmail.com', href: 'mailto:prasannaellepola2000@gmail.com' },
-    { icon: FaMapMarkerAlt, text: '184 Vijitha Mawatha, Muruthalawa, Kandy', href: null }
-  ];
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  };
 
   return (
     <motion.section
       id="contact"
-      className="min-h-screen flex items-center bg-gray-900 overflow-hidden"
+      className="min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden relative"
       variants={backgroundVariants}
       animate="animate"
-      style={{
-        backgroundImage: 'radial-gradient(circle at 10% 20%, rgb(21, 21, 21) 0%, rgb(64, 64, 64) 90.2%)',
-        backgroundSize: '400% 400%'
-      }}
     >
-      <div className="container mx-auto px-6 py-16">
+      <div ref={sceneRef} className="absolute inset-0" />
+      <div className="container mx-auto px-6 py-16 z-10">
         <motion.h2
           className="text-4xl font-bold text-[#33FF66] mb-6 text-center"
           initial={{ opacity: 0, y: -50 }}
@@ -106,98 +176,118 @@ const Contacts = () => {
           Feel free to reach out for collaborations or just a friendly hello
         </motion.p>
 
-        <div className="flex flex-col lg:flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
           {/* Left Section: Contact Info */}
           <motion.div
-            className="lg:w-1/2 w-full mb-12 lg:mb-0"
+            className="md:w-1/2 w-full mb-12 md:mb-0"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <img
-              src={profileImage}
-              alt="Portfolio design"
-              className="w-full h-64 object-cover rounded-lg shadow-lg mb-8"
-            />
-            {contactInfo.map((item, index) => (
-              <motion.div
-                key={index}
-                className="flex items-center mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-              >
-                <item.icon className="text-[#33FF66] mr-4 text-2xl" />
-                {item.href ? (
-                  <a href={item.href} className="text-white hover:text-[#33FF66] transition-colors">
-                    {item.text}
-                  </a>
-                ) : (
-                  <span className="text-white">{item.text}</span>
-                )}
-              </motion.div>
-            ))}
+            <motion.div
+              className="flex flex-col space-y-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {[
+                { icon: FaPhone, text: '+94757358093', href: 'tel:+94757358093' },
+                { icon: FaEnvelope, text: 'prasannaellepola2000@gmail.com', href: 'mailto:prasannaellepola2000@gmail.com' },
+                { icon: FaMapMarkerAlt, text: '184 Vijitha Mawatha, Muruthalawa, Kandy', href: null }
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  className="flex items-center"
+                  variants={itemVariants}
+                >
+                  <item.icon className="text-[#33FF66] mr-4 text-2xl" />
+                  {item.href ? (
+                    <a href={item.href} className="text-white hover:text-[#33FF66] transition-colors">
+                      {item.text}
+                    </a>
+                  ) : (
+                    <span className="text-white">{item.text}</span>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Social Icons */}
+            <motion.div
+              className="flex space-x-4 mt-8"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {[
+                { href: "https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit", icon: FaLinkedin },
+                { href: "https://github.com/", icon: FaGithub },
+                { href: "mailto:prasannaellepola2000@gmail.com", icon: FaEnvelope },
+                { href: "tel:+94757358093", icon: FaPhone }
+              ].map((item, index) => (
+                <motion.a
+                  key={index}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white p-3 rounded-full shadow-lg"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.2, rotate: 360, backgroundColor: "#33FF66" }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <item.icon className="text-2xl text-gray-800" />
+                </motion.a>
+              ))}
+            </motion.div>
           </motion.div>
 
           {/* Right Section: Contact Form */}
           <motion.div
-            className="lg:w-1/2 w-full lg:pl-12"
+            className="md:w-1/2 w-full md:pl-12"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <form onSubmit={sendEmail} className="bg-gray-800 p-8 rounded-lg shadow-lg">
-              <div className="mb-6">
-                <label className="block text-gray-300 font-semibold mb-2" htmlFor="name">Name</label>
+            <form onSubmit={sendEmail} className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-lg">
+              <motion.div className="mb-4" variants={itemVariants}>
                 <input
                   type="text"
                   id="name"
                   name="name"
+                  placeholder="Your Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
+                  className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
                   required
                 />
-              </div>
-              <div className="mb-6">
-                <label className="block text-gray-300 font-semibold mb-2" htmlFor="email">Email</label>
+              </motion.div>
+              <motion.div className="mb-4" variants={itemVariants}>
                 <input
                   type="email"
                   id="email"
                   name="email"
+                  placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
+                  className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
                   required
                 />
-              </div>
-              <div className="mb-6">
-                <label className="block text-gray-300 font-semibold mb-2" htmlFor="subject">Subject</label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
-                  required
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-gray-300 font-semibold mb-2" htmlFor="message">Message</label>
+              </motion.div>
+              <motion.div className="mb-4" variants={itemVariants}>
                 <textarea
                   id="message"
                   name="message"
+                  placeholder="Your Message"
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
+                  className="w-full p-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#33FF66]"
                   rows="4"
                   required
                 />
-              </div>
+              </motion.div>
               <motion.button
                 type="submit"
-                className="w-full py-3 bg-[#33FF66] text-gray-900 font-bold rounded-lg hover:bg-[#2be559] transition duration-300 flex items-center justify-center"
+                className="w-full py-2 bg-[#33FF66] text-gray-900 font-bold rounded-lg hover:bg-[#2be559] transition duration-300 flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 disabled={isSubmitting}
@@ -205,7 +295,7 @@ const Contacts = () => {
                 {isSubmitting ? 'Sending...' : (
                   <>
                     <FaPaperPlane className="mr-2" />
-                    Send Message
+                    Send
                   </>
                 )}
               </motion.button>
