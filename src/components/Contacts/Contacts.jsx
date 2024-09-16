@@ -13,7 +13,6 @@ const Contacts = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const controls = useAnimation();
   const sceneRef = useRef();
 
   useEffect(() => {
