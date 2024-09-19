@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaLinkedin, FaGithub } from 'react-icons/fa';
-import emailjs from '@emailjs/browser';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    subject: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,43 +82,22 @@ const Contacts = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const sendEmail = (e) => {
+  const openOutlookEmail = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const emailParams = {
-      to_email: 'your-email@example.com', // Replace with your email
-      user_name: formData.name,
-      user_email: formData.email,
-      message: formData.message
-    };
+    const { name, subject, message } = formData;
+    const mailtoLink = `mailto:prasannaellepola2000@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\n\n${message}`)}`;
+    
+    window.location.href = mailtoLink;
 
-    emailjs
-      .send(
-        'service_v00vnam',
-        'template_boziy3a',
-        emailParams,
-        'QOQuRU-v_0cF_qi-PqNJ2'
-      )
-      .then(
-        (result) => {
-          console.log('Email sent successfully:', result.text);
-          setSubmitStatus('success');
-          setFormData({
-            name: '',
-            email: '',
-            message: ''
-          });
-        },
-        (error) => {
-          console.log('Error sending email:', error.text);
-          setSubmitStatus('error');
-        }
-      )
-      .finally(() => {
-        setIsSubmitting(false);
-        setTimeout(() => setSubmitStatus(null), 3000);
-      });
+    // Simulate email client opening
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitStatus('success');
+      setFormData({ name: '', subject: '', message: '' });
+      setTimeout(() => setSubmitStatus(null), 3000);
+    }, 1000);
   };
 
   const backgroundVariants = {
@@ -255,11 +233,11 @@ const Contacts = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <form onSubmit={sendEmail} className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-lg">
-              {['name', 'email'].map((field) => (
+            <form onSubmit={openOutlookEmail} className="bg-gray-800 bg-opacity-50 p-6 rounded-lg shadow-lg">
+              {['name', 'subject'].map((field) => (
                 <motion.div key={field} className="mb-4" variants={itemVariants}>
                   <input
-                    type={field === 'email' ? 'email' : 'text'}
+                    type="text"
                     id={field}
                     name={field}
                     placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
@@ -289,7 +267,7 @@ const Contacts = () => {
                 whileTap={{ scale: 0.96 }}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : (
+                {isSubmitting ? 'Opening Outlook...' : (
                   <>
                     <FaPaperPlane className="mr-2" />
                     Send
@@ -310,7 +288,7 @@ const Contacts = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 60 }}
             >
-              {submitStatus === 'success' ? 'Message sent successfully!' : 'Failed to send message. Please try again.'}
+              {submitStatus === 'success' ? 'Outlook opened with your message!' : 'Failed to open Outlook. Please try again.'}
             </motion.div>
           )}
         </AnimatePresence>
