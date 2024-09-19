@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FaTimes } from 'react-icons/fa';
 import profileImage from '../../assets/image2.jpg';
 import cvFile from '../../assets/CV.pdf';
 
 const ProfileAbout = () => {
-  const [showModal, setShowModal] = useState(false);
   const controls = useAnimation();
   const threeContainerRef = useRef(null);
 
@@ -178,7 +176,7 @@ const ProfileAbout = () => {
             </motion.div>
 
             <motion.div
-              className="w-full md:w-1/2 text-gray-300"
+              className="w-full md:w-1/2 text-gray-290"
               variants={itemVariants}
             >
               <h3 className="text-2xl font-semibold mb-4">Dilshan Prasanna</h3>
@@ -186,14 +184,6 @@ const ProfileAbout = () => {
                 I'm a web developer skilled in Angular, React.js, Node.js, and Django. I create responsive, user-friendly websites and applications, including B2B invoice systems and ad management platforms. My focus is on clean design and efficient functionality.
               </p>
               <motion.div className="flex space-x-4 mb-6">
-                <motion.button
-                  className="bg-[#33FF66] hover:bg-[#2EDD5C] text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowModal(true)}
-                >
-                  Contact Me
-                </motion.button>
                 <motion.a
                   href={cvFile}
                   download="Dilshan_Prasanna_CV.pdf"
@@ -208,54 +198,6 @@ const ProfileAbout = () => {
           </div>
         </motion.div>
       </div>
-
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="bg-gray-700 p-6 rounded-lg max-w-md w-full"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-2xl font-bold text-[#33FF66]">Contact Me</h3>
-                <button onClick={() => setShowModal(false)}>
-                  <FaTimes className="text-gray-400 hover:text-white" />
-                </button>
-              </div>
-              <form className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white"
-                />
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white"
-                />
-                <textarea
-                  placeholder="Your Message"
-                  rows={4}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full bg-[#33FF66] hover:bg-[#2EDD5C] text-gray-900 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
-                >
-                  Send Message
-                </button>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.section>
   );
 };
