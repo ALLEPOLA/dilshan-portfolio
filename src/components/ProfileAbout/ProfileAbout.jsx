@@ -176,12 +176,12 @@ const ProfileAbout = () => {
             </motion.div>
 
             <motion.div
-              className="w-full md:w-1/2 text-gray-290"
+              className="w-full md:w-1/2 text-white"
               variants={itemVariants}
             >
               <h3 className="text-2xl font-semibold mb-4">Dilshan Prasanna</h3>
               <p className="mb-4">
-                I'm a web developer skilled in Angular, React.js, Node.js, and Django. I create responsive, user-friendly websites and applications, including B2B invoice systems and ad management platforms. My focus is on clean design and efficient functionality.
+              I am an IT professional with a passion for developing innovative and efficient solutions, specializing in web development, software engineering, and system integration.
               </p>
               <motion.div className="flex space-x-4 mb-6">
                 <motion.a
