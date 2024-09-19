@@ -7,18 +7,14 @@ import profileImage from '../../assets/image2.jpg';
 import cvFile from '../../assets/CV.pdf';
 
 const ProfileAbout = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [, setVisible] = useState(false); // State for animation trigger
-  const [showModal, setShowModal] = useState(false); // State for modal visibility
-  const controls = useAnimation(); // Framer motion animation controls
-  const threeContainerRef = useRef(null); // Ref for Three.js container
+  const [showModal, setShowModal] = useState(false);
+  const controls = useAnimation();
+  const threeContainerRef = useRef(null);
 
-  // Intersection observer to trigger animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setVisible(true); // Triggers animation visibility
           controls.start("visible");
         }
       },
@@ -32,20 +28,20 @@ const ProfileAbout = () => {
 
     return () => {
       if (profileAboutElement) {
-        observer.disconnect();
+        observer.unobserve(profileAboutElement);
       }
     };
   }, [controls]);
 
-  // Three.js scene setup
   useEffect(() => {
     if (!threeContainerRef.current) return;
 
+    const currentThreeContainer = threeContainerRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    threeContainerRef.current.appendChild(renderer.domElement);
+    currentThreeContainer.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -78,13 +74,19 @@ const ProfileAbout = () => {
     camera.position.z = 2;
 
     const animate = () => {
-      requestAnimationFrame(animate);
       orbitControls.update();
       particlesMesh.rotation.y += 0.001;
       renderer.render(scene, camera);
     };
 
-    animate();
+    let animationFrameId;
+
+    const renderScene = () => {
+      animationFrameId = requestAnimationFrame(renderScene);
+      animate();
+    };
+
+    renderScene();
 
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -96,9 +98,10 @@ const ProfileAbout = () => {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
       renderer.dispose();
-      if (threeContainerRef.current) {
-        threeContainerRef.current.removeChild(renderer.domElement);
+      if (currentThreeContainer) {
+        currentThreeContainer.removeChild(renderer.domElement);
       }
     };
   }, []);
@@ -215,10 +218,10 @@ const ProfileAbout = () => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gray-800 p-6 rounded-lg max-w-md w-full"
+              className="bg-gray-700 p-6 rounded-lg max-w-md w-full"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.8, opacity: 0 }}
             >
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold text-[#33FF66]">Contact Me</h3>

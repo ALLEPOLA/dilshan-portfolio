@@ -194,7 +194,7 @@ const Skills = () => {
             >
               <motion.div
                 className="bg-gray-800 p-8 rounded-xl max-w-md w-full"
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
               >

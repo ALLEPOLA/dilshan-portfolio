@@ -66,11 +66,13 @@ const Services = () => {
   useEffect(() => {
     if (!threeContainerRef.current) return;
 
+    const currentThreeContainer = threeContainerRef.current;
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    threeContainerRef.current.appendChild(renderer.domElement);
+    currentThreeContainer.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -122,8 +124,8 @@ const Services = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
-      if (threeContainerRef.current) {
-        threeContainerRef.current.removeChild(renderer.domElement);
+      if (currentThreeContainer) {
+        currentThreeContainer.removeChild(renderer.domElement);
       }
     };
   }, []);
@@ -204,7 +206,7 @@ const Services = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg cursor-pointer"
               onClick={() => setSelectedService(service)}
-              whileHover={{ scale: 1.05, boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.2)' }}
+              whileHover={{ scale: 1.05, boxShadow: '0px 18px 30px rgba(0, 0, 0, 0.2)' }}
             >
               <div className="flex flex-col items-center mb-4">
                 <service.icon className="w-16 h-16 mb-3 text-[#33FF66]" />
@@ -226,7 +228,7 @@ const Services = () => {
             >
               <motion.div
                 className="bg-gray-800 p-6 rounded-lg max-w-md w-full"
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
               >

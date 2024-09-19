@@ -11,11 +11,12 @@ const About = () => {
   const [hoveredRole, setHoveredRole] = useState(null);
 
   useEffect(() => {
+    const currentModelRef = modelRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(400, 400);
-    modelRef.current.appendChild(renderer.domElement);
+    currentModelRef.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -33,7 +34,7 @@ const About = () => {
       '/path/to/your/3d-model.glb',
       (gltf) => {
         const model = gltf.scene;
-        model.scale.set(0.5, 0.5, 0.5);
+        model.scale.set(0.6, 0.5, 0.5);
         scene.add(model);
         setLoading(false);
 
@@ -86,7 +87,9 @@ const About = () => {
 
     return () => {
       renderer.dispose();
-      modelRef.current.removeChild(renderer.domElement);
+      if (currentModelRef) {
+        currentModelRef.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
@@ -125,7 +128,7 @@ const About = () => {
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100,
+        stiffness: 90,
       },
     },
   };
@@ -284,7 +287,7 @@ const About = () => {
                 textShadow: [
                   "0 0 5px rgba(51,255,102,0)",
                   "0 0 20px rgba(51,255,102,0.8)",
-                  "0 0 5px rgba(51,255,102,0)"
+                  "0 0 5px rgba(50,255,102,0)"
                 ]
               }}
               transition={{ duration: 3, repeat: Infinity }}

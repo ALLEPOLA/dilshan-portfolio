@@ -16,11 +16,12 @@ const Contacts = () => {
   const sceneRef = useRef();
 
   useEffect(() => {
+    const currentSceneRef = sceneRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    sceneRef.current.appendChild(renderer.domElement);
+    currentSceneRef.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -72,7 +73,9 @@ const Contacts = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
-      sceneRef.current.removeChild(renderer.domElement);
+      if (currentSceneRef) {
+        currentSceneRef.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
@@ -283,7 +286,7 @@ const Contacts = () => {
                 type="submit"
                 className="w-full py-2 bg-[#33FF66] text-gray-900 font-bold rounded-lg hover:bg-[#2be559] transition duration-300 flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.96 }}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Sending...' : (
@@ -303,9 +306,9 @@ const Contacts = () => {
               className={`fixed bottom-4 right-4 p-4 rounded-lg ${
                 submitStatus === 'success' ? 'bg-green-500' : 'bg-red-500'
               } text-white`}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
+              exit={{ opacity: 0, y: 60 }}
             >
               {submitStatus === 'success' ? 'Message sent successfully!' : 'Failed to send message. Please try again.'}
             </motion.div>
