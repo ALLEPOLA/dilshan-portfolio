@@ -108,7 +108,7 @@ const About = () => {
   const roles = [
     "UI/UX DEVELOPER",
     "WEB DEVELOPER",
-    "FULL STACK ENGINEER"
+    "FULL STACK DEVELOPER"
   ];
 
   const containerVariants = {
@@ -139,7 +139,7 @@ const About = () => {
         return "Creating intuitive and visually appealing user interfaces";
       case 'WEB DEVELOPER':
         return "Building responsive and dynamic web applications";
-      case 'FULL STACK ENGINEER':
+      case 'FULL STACK DEVELOPER':
         return "Developing end-to-end solutions from front-end to back-end";
       default:
         return "";
