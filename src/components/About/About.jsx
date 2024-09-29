@@ -328,7 +328,7 @@ const About = () => {
             exit={{ opacity: 0, height: 0 }}
             className="bg-gray-800 text-white p-8"
           >
-            <h3 className="text-2xl font-bold mb-4">About Me</h3>
+            <h3 className="text-2xl font-bold mb-4">GET IDEA</h3>
             <p className="text-lg mb-4">
               I'm a passionate developer with a keen eye for design and a love for creating seamless user experiences. 
               With expertise in both front-end and back-end technologies, I bring ideas to life through clean, 
