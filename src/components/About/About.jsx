@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaLinkedin, FaGithub, FaEnvelope, FaPhone, FaChevronDown } from 'react-icons/fa';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -9,6 +9,7 @@ const About = () => {
   const modelRef = useRef();
   const [loading, setLoading] = useState(true);
   const [hoveredRole, setHoveredRole] = useState(null);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const currentModelRef = modelRef.current;
@@ -215,16 +216,18 @@ const About = () => {
             ))}
           </motion.ul>
 
-          {hoveredRole && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="text-white bg-gray-800 bg-opacity-50 p-4 rounded-lg"
-            >
-              <p>{getRoleDescription(hoveredRole)}</p>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {hoveredRole && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-white bg-gray-800 bg-opacity-50 p-4 rounded-lg"
+              >
+                <p>{getRoleDescription(hoveredRole)}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <motion.div
             className="flex space-x-4 mt-8"
@@ -304,6 +307,37 @@ const About = () => {
           </motion.div>
         </motion.div>
       </div>
+
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+        onClick={() => setShowMore(!showMore)}
+      >
+        <FaChevronDown 
+          className="text-[#33FF66] text-3xl animate-bounce" 
+        />
+      </motion.div>
+
+      <AnimatePresence>
+        {showMore && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="bg-gray-800 text-white p-8"
+          >
+            <h3 className="text-2xl font-bold mb-4">About Me</h3>
+            <p className="text-lg mb-4">
+              I'm a passionate developer with a keen eye for design and a love for creating seamless user experiences. 
+              With expertise in both front-end and back-end technologies, I bring ideas to life through clean, 
+              efficient code and intuitive interfaces.
+            </p>
+           
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 };
