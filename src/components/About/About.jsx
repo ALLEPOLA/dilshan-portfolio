@@ -236,8 +236,8 @@ const About = () => {
             animate="visible"
           >
             {[
-              { href: "https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit", icon: FaLinkedin },
-              { href: "https://github.com/", icon: FaGithub },
+              { href: "https://www.linkedin.com/in/dilshan-prasanna-allepola-1a883a20a/", icon: FaLinkedin },
+              { href: "https://github.com/ALLEPOLA", icon: FaGithub },
               { href: "mailto:prasannaellepola2000@gmail.com", icon: FaEnvelope },
               { href: "tel:+94757358093", icon: FaPhone }
             ].map((item, index) => (
